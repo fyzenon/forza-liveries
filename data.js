@@ -1,6 +1,9 @@
 window.designs = [
     {
-        name: "2020 Toyota GR Supra: Colorful Implosion",
+        year: 2020,
+        make: "Toyota",
+        model: "GR Supra",
+        name: "Colorful Implosion",
         brand: "Toyota",
         tags: ["RWD", "Anime", "Rare"],
         code: "631-187-591",
@@ -14,7 +17,10 @@ window.designs = [
         thumbnail: "https://i.ibb.co/nMcn7kVj/3-E5851-FB-ADDE-43-F0-8-C0-D-E9-AAA7-F7-FD76.png"
     },
     {
-        name: "2022 Dodge Challenger Super Stock: ZZZ",
+        year: 2022,
+        make: "Dodge",
+        model: "Challenger Super Stock",
+        name: "ZZZ",
         brand: "Dodge",
         tags: ["Anime", "RWD", "Rare"],
         code: "699-2780772",
