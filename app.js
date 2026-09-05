@@ -1,24 +1,10 @@
 const designs = [
     {
-        name: "Ferrari F40",
-        brand: "Ferrari",
-        tags: ["Classic", "Red"],
-        code: "123-456-789",
-        thumbnail: "artifacts/imgs/img_1788487621849.png"
-    },
-    {
-        name: "Porsche 911 GT3",
-        brand: "Porsche",
-        tags: ["Modern", "Track"],
-        code: "654-321-987",
-        thumbnail: "artifacts/imgs/img_1788487621849.png"
-    },
-    {
-        name: "McLaren 720S",
-        brand: "McLaren",
-        tags: ["Modern", "Neon"],
-        code: "321-654-987",
-        thumbnail: "artifacts/imgs/img_1788487621849.png"
+        name: "name",
+        brand: "brand",
+        tags: ["tag1", "tag2"],
+        code: "000-000-000",
+        thumbnail: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg2.clipart-library.com%2F27%2Fcar-images-clip-art%2Fcar-images-clip-art-2.png"
     }
 ];
 
