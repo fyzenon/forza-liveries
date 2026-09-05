@@ -1,10 +1,24 @@
 const designs = [
     {
         name: "Colorful Implosion",
-        brand: "2020 Toyota GR Supra",
-        tags: ["RWD", "anime"],
+        brand: "Toyota",
+        tags: ["RWD", "Anime", "Rare"],
         code: "631-187-591",
         thumbnail: "https://i.ibb.co/0VZS0ZZN/6-EC91-E61-DDFC-4-CFE-A843-1813-DD0-D136-C.png"
+    },
+    {
+        name: "RE:Zero Ram",
+        brand: "BMW",
+        tags: ["Anime", "RWD", "Epic"],
+        code: "819-669-727",
+        thumbnail: "https://i.ibb.co/nMcn7kVj/3-E5851-FB-ADDE-43-F0-8-C0-D-E9-AAA7-F7-FD76.png"
+    },
+    {
+        name: "ZZZ",
+        brand: "Dodge",
+        tags: ["Anime", "RWD", "Rare"],
+        code: "699-2780772",
+        thumbnail: "https://i.ibb.co/4RT8p160/B21-BAD25-56-F6-4-FDF-9-D2-C-7-DE9-BBC80-AFC.png"
     }
 ];
 
