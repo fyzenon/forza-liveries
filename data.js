@@ -25,5 +25,14 @@ window.designs = [
         tags: ["Anime", "RWD", "Rare"],
         code: "699-278-772",
         thumbnail: "https://i.ibb.co/4RT8p160/B21-BAD25-56-F6-4-FDF-9-D2-C-7-DE9-BBC80-AFC.png"
+    },
+    {
+        year: 2018,
+        make: "Mercedes-AMG",
+        model: "E 63 S",
+        name: "Neon Nights",
+        tags: ["Anime", "AWD", "Epic"],
+        code: "None",
+        thumbnail: "https://i.ibb.co/9mTW2Ttt/4517-F12-C-57-C3-407-B-B120-A0-F866-CF740-F.png"
     }
 ];
