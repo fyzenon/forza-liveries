@@ -10,16 +10,16 @@ window.copyCode = function(code) {
     });
 };
 
-window.renderGallery = function() {
+window.renderGallery = function(designsToRender = window.designs) {
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
 
     gallery.innerHTML = '';
 
-    const filteredDesigns = designs.filter(d => {
+    const filteredDesigns = designsToRender.filter(d => {
         if (activeFilters.size === 0) return true;
         return Array.from(activeFilters).every(filter => 
-            d.brand === filter || d.tags.includes(filter)
+            d.make === filter || d.tags.includes(filter)
         );
     });
 
@@ -51,6 +51,21 @@ window.renderGallery = function() {
     });
 };
 
+window.filterDesigns = function() {
+    const makeQuery = document.getElementById('filter-make').value.toLowerCase();
+    const yearQuery = document.getElementById('filter-year').value;
+    const driveQuery = document.getElementById('filter-drive').value;
+
+    const filtered = designs.filter(d => {
+        const matchMake = !makeQuery || d.make.toLowerCase().includes(makeQuery);
+        const matchYear = !yearQuery || d.year.toString() === yearQuery;
+        const matchDrive = !driveQuery || d.drivetrain === driveQuery;
+        return matchMake && matchYear && matchDrive;
+    });
+
+    window.renderGallery(filtered);
+};
+
 function updateFilterUI() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         const val = btn.textContent;
@@ -70,9 +85,11 @@ window.initFilters = function() {
 
     filterBar.innerHTML = '';
 
-    const brands = [...new Set(designs.map(d => d.brand))];
+    const makes = [...new Set(designs.map(d => d.make))];
     const tags = [...new Set(designs.flatMap(d => d.tags))];
-    const allOptions = [...brands, ...tags];
+    const allOptions = [...makes, ...tags];
+
+
 
     const allBtn = document.createElement('button');
     allBtn.className = 'filter-btn active';
@@ -84,28 +101,24 @@ window.initFilters = function() {
     };
     filterBar.appendChild(allBtn);
 
-    allOptions.forEach(option => {
+    allOptions.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'filter-btn';
-        btn.textContent = option;
+        btn.textContent = opt;
         btn.onclick = () => {
-            const brandsList = [...new Set(designs.map(d => d.brand))];
-            if (brandsList.includes(option)) {
-                brandsList.forEach(b => { if(b !== option) activeFilters.delete(b); });
-                if (activeFilters.has(option)) {
-                    activeFilters.delete(option);
-                } else {
-                    activeFilters.add(option);
-                }
+            if (activeFilters.has(opt)) {
+                activeFilters.delete(opt);
             } else {
-                if (activeFilters.has(option)) {
-                    activeFilters.delete(option);
-                } else {
-                    activeFilters.add(option);
-                }
+                activeFilters.add(opt);
             }
             updateFilterUI();
             window.renderGallery();
         };
+        filterBar.appendChild(btn);
     });
-};
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    window.renderGallery();
+    window.initFilters();
+});

@@ -13,13 +13,32 @@
         <p style="color: var(--text-dim)">Premium Designs for the Forza Horizon Series</p>
     </header>
 
-    <div class="filter-container" id="filter-bar">
-        <button class="filter-btn active" data-filter="all">All Designs</button>
+    <div class="filter-container">
+        <div class="search-controls">
+            <input type="text" id="filter-make" placeholder="Filter by Make..." oninput="filterDesigns()">
+            <input type="number" id="filter-year" placeholder="Year..." oninput="filterDesigns()">
+            <select id="filter-drive" onchange="filterDesigns()">
+                <option value="">All Drivetrains</option>
+                <option value="FWD">FWD</option>
+                <option value="RWD">RWD</option>
+                <option value="AWD">AWD</option>
+            </select>
+        </div>
+        <div class="filter-tags" id="filter-bar">
+            <button class="filter-btn active" data-filter="all">All Designs</button>
+        </div>
     </div>
 
     <main class="gallery" id="gallery">
     </main>
 
+    <script src="data.js"></script>
     <script src="app.js"></script>
+    <script>
+        window.onload = () => {
+            window.initFilters();
+            window.renderGallery();
+        };
+    </script>
 </body>
 </html>

@@ -172,3 +172,50 @@ header {
         from { transform: translateX(100%); }
         to { transform: translateX(0); }
     }
+
+/* Car Info Styles */
+.car-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.car-year {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.car-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+/* Search Controls */
+.search-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.search-controls input, .search-controls select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--text-dim);
+    background: var(--bg-dark);
+    color: white;
+    font-family: inherit;
+}
+
+.filter-tags {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
