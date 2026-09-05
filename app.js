@@ -1,51 +1,65 @@
 const designs = [
     {
-        name: "Colorful Implosion",
-        brand: "Toyota",
-        tags: ["RWD", "Anime", "Rare"],
-        code: "631-187-591",
-        thumbnail: "https://i.ibb.co/0VZS0ZZN/6-EC91-E61-DDFC-4-CFE-A843-1813-DD0-D136-C.png"
+        name: "Ferrari F40",
+        brand: "Ferrari",
+        tags: ["Classic", "Red"],
+        code: "123-456-789",
+        thumbnail: "artifacts/imgs/img_1788487621849.png"
     },
     {
-        name: "RE:Zero Ram",
-        brand: "BMW",
-        tags: ["Anime", "RWD", "Epic"],
-        code: "819-669-727",
-        thumbnail: "https://i.ibb.co/nMcn7kVj/3-E5851-FB-ADDE-43-F0-8-C0-D-E9-AAA7-F7-FD76.png"
+        name: "Porsche 911 GT3",
+        brand: "Porsche",
+        tags: ["Modern", "Track"],
+        code: "654-321-987",
+        thumbnail: "artifacts/imgs/img_1788487621849.png"
     },
     {
-        name: "ZZZ",
-        brand: "Dodge",
-        tags: ["Anime", "RWD", "Rare"],
-        code: "699-2780772",
-        thumbnail: "https://i.ibb.co/4RT8p160/B21-BAD25-56-F6-4-FDF-9-D2-C-7-DE9-BBC80-AFC.png"
+        name: "McLaren 720S",
+        brand: "McLaren",
+        tags: ["Modern", "Neon"],
+        code: "321-654-987",
+        thumbnail: "artifacts/imgs/img_1788487621849.png"
     }
 ];
 
+let activeFilters = new Set();
+
 window.copyCode = function(code) {
     navigator.clipboard.writeText(code).then(() => {
-        alert('Code copied: ' + code);
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = 'Copied: ' + code;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     });
 };
 
-window.renderGallery = function(filter = 'all') {
+window.renderGallery = function() {
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
 
     gallery.innerHTML = '';
 
-    const filteredDesigns = filter === 'all' 
-        ? designs 
-        : designs.filter(d => d.brand === filter || d.tags.includes(filter));
+    const filteredDesigns = designs.filter(d => {
+        if (activeFilters.size === 0) return true;
+        return Array.from(activeFilters).every(filter => 
+            d.brand === filter || d.tags.includes(filter)
+        );
+    });
+
+    if (filteredDesigns.length === 0) {
+        gallery.innerHTML = '<div style="text-align:center; grid-column: 1/-1; color: var(--text-dim); padding: 3rem;">No designs match these filters.</div>';
+        return;
+    }
 
     filteredDesigns.forEach(design => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <img src="${design.thumbnail}" alt="${design.name}" class="thumb">
-            <div class="card-info">
+            <img src="${design.thumbnail}" alt="${design.name}" class="thumbnail">
+            <div class="card-content">
                 <h3 class="car-name">${design.name}</h3>
-                <div class="tag-list">
+                <div class="tags">
                     ${design.tags.map(t => `<span class="tag">${t}</span>`).join('')}
                 </div>
                 <div class="share-section">
@@ -58,39 +72,66 @@ window.renderGallery = function(filter = 'all') {
     });
 };
 
+function updateFilterUI() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        const val = btn.textContent;
+        if (val === 'All') {
+            btn.classList.add('active');
+        } else if (activeFilters.has(val)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
 window.initFilters = function() {
     const filterBar = document.getElementById('filter-bar');
     if (!filterBar) return;
 
+    filterBar.innerHTML = '';
+
     const brands = [...new Set(designs.map(d => d.brand))];
     const tags = [...new Set(designs.flatMap(d => d.tags))];
-    const allFilters = [...brands, ...tags];
+    const allOptions = [...brands, ...tags];
 
-    allFilters.forEach(filter => {
+    const allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn active';
+    allBtn.textContent = 'All';
+    allBtn.onclick = () => {
+        activeFilters.clear();
+        updateFilterUI();
+        window.renderGallery();
+    };
+    filterBar.appendChild(allBtn);
+
+    allOptions.forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'filter-btn';
-        btn.textContent = filter;
-        btn.dataset.filter = filter;
+        btn.textContent = option;
         btn.onclick = () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            window.renderGallery(filter);
+            const brands = [...new Set(designs.map(d => d.brand))];
+            if (brands.includes(option)) {
+                brands.forEach(b => { if(b !== option) activeFilters.delete(b); });
+                if (activeFilters.has(option)) {
+                    activeFilters.delete(option);
+                } else {
+                    activeFilters.add(option);
+                }
+            } else {
+                if (activeFilters.has(option)) {
+                    activeFilters.delete(option);
+                } else {
+                    activeFilters.add(option);
+                }
+            }
+            updateFilterUI();
+            window.renderGallery();
         };
         filterBar.appendChild(btn);
     });
-
-    const allBtn = document.querySelector('[data-filter="all"]');
-    if (allBtn) {
-        allBtn.onclick = () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            allBtn.classList.add('active');
-            window.renderGallery('all');
-        };
-    }
 };
 
-// Initialize on load
-(function() {
-    window.initFilters();
-    window.renderGallery('all');
-})();
+// Initial load
+window.initFilters();
+window.renderGallery();
