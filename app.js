@@ -1,27 +1,3 @@
-const designs = [
-    {
-        name: "Colorful Implosion",
-        brand: "Toyota",
-        tags: ["RWD", "Anime", "Rare"],
-        code: "631-187-591",
-        thumbnail: "https://i.ibb.co/4wbwqnjJ/A1-F92819-7715-44-A6-87-CF-D0551-C42-EFA5.png"
-    },
-    {
-        name: "RE:Zero Ram",
-        brand: "BMW",
-        tags: ["Anime", "RWD", "Epic"],
-        code: "819-669-727",
-        thumbnail: "https://i.ibb.co/nMcn7kVj/3-E5851-FB-ADDE-43-F0-8-C0-D-E9-AAA7-F7-FD76.png"
-    },
-    {
-        name: "ZZZ",
-        brand: "Dodge",
-        tags: ["Anime", "RWD", "Rare"],
-        code: "699-2780772",
-        thumbnail: "https://i.ibb.co/4RT8p160/B21-BAD25-56-F6-4-FDF-9-D2-C-7-DE9-BBC80-AFC.png"
-    }
-];
-
 let activeFilters = new Set();
 
 window.copyCode = function(code) {
@@ -56,9 +32,12 @@ window.renderGallery = function() {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <img src="${design.thumbnail}" alt="${design.name}" class="thumbnail">
+            <img src="${design.thumbnail}" alt="${design.model}" class="thumbnail">
             <div class="card-content">
-                <h3 class="car-name">${design.name}</h3>
+                <div class="car-info">
+                    <span class="car-year">${design.year}</span>
+                    <h3 class="car-name">${design.make} ${design.model}</h3>
+                </div>
                 <div class="tags">
                     ${design.tags.map(t => `<span class="tag">${t}</span>`).join('')}
                 </div>
@@ -110,9 +89,9 @@ window.initFilters = function() {
         btn.className = 'filter-btn';
         btn.textContent = option;
         btn.onclick = () => {
-            const brands = [...new Set(designs.map(d => d.brand))];
-            if (brands.includes(option)) {
-                brands.forEach(b => { if(b !== option) activeFilters.delete(b); });
+            const brandsList = [...new Set(designs.map(d => d.brand))];
+            if (brandsList.includes(option)) {
+                brandsList.forEach(b => { if(b !== option) activeFilters.delete(b); });
                 if (activeFilters.has(option)) {
                     activeFilters.delete(option);
                 } else {
@@ -128,10 +107,5 @@ window.initFilters = function() {
             updateFilterUI();
             window.renderGallery();
         };
-        filterBar.appendChild(btn);
     });
 };
-
-// Initial load
-window.initFilters();
-window.renderGallery();
