@@ -1,10 +1,10 @@
 const designs = [
     {
-        name: "name",
-        brand: "brand",
-        tags: ["tag1", "tag2"],
-        code: "000-000-000",
-        thumbnail: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg2.clipart-library.com%2F27%2Fcar-images-clip-art%2Fcar-images-clip-art-2.png"
+        name: "Colorful Implosion",
+        brand: "2020 Toyota GR Supra",
+        tags: ["RWD", "anime"],
+        code: "631-187-591",
+        thumbnail: "https://i.ibb.co/0VZS0ZZN/6-EC91-E61-DDFC-4-CFE-A843-1813-DD0-D136-C.png"
     }
 ];
 
