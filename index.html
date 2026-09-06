@@ -15,13 +15,13 @@
 
     <div class="filter-container">
         <div class="search-controls">
-            <input type="text" id="filter-make" list="makes-list" placeholder="Filter by Make..." oninput="filterDesigns()">
+            <input type="text" id="filter-make" list="makes-list" placeholder="Filter by Make...">
             <datalist id="makes-list"></datalist>
             
-            <input type="text" id="filter-year" list="years-list" placeholder="Year..." oninput="filterDesigns()">
+            <input type="text" id="filter-year" list="years-list" placeholder="Year...">
             <datalist id="years-list"></datalist>
 
-            <select id="filter-drive" onchange="filterDesigns()">
+            <select id="filter-drive">
                 <option value="">All Drivetrains</option>
                 <option value="FWD">FWD</option>
                 <option value="RWD">RWD</option>
@@ -29,7 +29,7 @@
             </select>
 
             <div class="tag-input-wrapper">
-                <input type="text" id="filter-tag-input" list="tags-list" placeholder="Add Tag..." onkeydown="handleTagInput(event)">
+                <input type="text" id="filter-tag-input" list="tags-list" placeholder="Add Tag...">
                 <datalist id="tags-list"></datalist>
             </div>
         </div>
@@ -45,7 +45,6 @@
     <script src="app.js"></script>
     <script>
         window.onload = () => {
-            window.initFilters();
             window.renderGallery();
         };
     </script>
