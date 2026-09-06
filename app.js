@@ -3,7 +3,7 @@
  * Handles gallery rendering, filtering, and design copying
  */
 
-window.designs = [];
+let activeFilters = new Set();
 
 window.showToast = function(msg) {
     const t = document.createElement('div');
@@ -16,26 +16,33 @@ window.showToast = function(msg) {
     }, 2000);
 };
 
-window.copyCode = function(code) {
-    navigator.clipboard.writeText(code).then(() => {
+window.copyCode = async function(code) {
+    try {
+        await navigator.clipboard.writeText(code);
         window.showToast('Code copied!');
-    });
+    } catch (err) {
+        console.error('Failed to copy: ', err);
+        window.showToast('Failed to copy code');
+    }
 };
 
-window.renderGallery = function(designsToRender = window.designs) {
+window.renderGallery = function(designsToRender) {
+    const data = designsToRender || window.designs;
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
     gallery.innerHTML = '';
 
-    if (designsToRender.length === 0) {
+    if (!data || data.length === 0) {
         gallery.innerHTML = '<div class="no-results">No designs found matching your criteria.</div>';
         return;
     }
 
-    designsToRender.forEach(d => {
+    data.forEach(d => {
         const card = document.createElement('div');
         card.className = 'card';
         const sortedTags = [...d.tags].sort();
+        const escapedCode = d.code.replace(/`/g, '\`').replace(/"/g, '&quot;');
+        
         card.innerHTML = `
             <img src="${d.thumbnail}" alt="${d.name}" class="card-img">
             <div class="card-content">
@@ -50,7 +57,7 @@ window.renderGallery = function(designsToRender = window.designs) {
                 </div>
                 <div class="card-footer">
                     <span class="card-drive">${d.drivetrain}</span>
-                    <button class="copy-btn" onclick="window.copyCode('${d.code}')">Copy Code</button>
+                    <button class="copy-btn" onclick="window.copyCode('${escapedCode}')">Copy Code</button>
                 </div>
             </div>
         `;
@@ -58,67 +65,30 @@ window.renderGallery = function(designsToRender = window.designs) {
     });
 };
 
-window.filterDesigns = function() {
-    const makeTerm = (document.getElementById('filter-make')?.value || '').toLowerCase();
-    const yearTerm = (document.getElementById('filter-year')?.value || '').toLowerCase();
-    const driveTerm = document.getElementById('filter-drive')?.value || '';
-    const tagTerm = (document.getElementById('filter-tag-input')?.value || '').toLowerCase();
+window.handleTagFilter = function(tag) {
+    if (activeFilters.has(tag)) {
+        activeFilters.delete(tag);
+    } else {
+        activeFilters.add(tag);
+    }
+    filterDesigns();
+};
 
+function filterDesigns() {
     const filtered = window.designs.filter(d => {
-        const matchMake = !makeTerm || d.make.toLowerCase().includes(makeTerm);
-        const matchYear = !yearTerm || d.year.toString().toLowerCase().includes(yearTerm);
-        const matchDrive = !driveTerm || d.drivetrain === driveTerm;
-        const matchTags = !tagTerm || d.tags.some(t => t.toLowerCase().includes(tagTerm));
-        return matchMake && matchYear && matchDrive && matchTags;
+        if (activeFilters.size === 0) return true;
+        return Array.from(activeFilters).every(f => d.tags.includes(f) || d.make === f);
     });
     window.renderGallery(filtered);
-};
+}
 
-window.handleTagFilter = function(tag) {
-    const tagInput = document.getElementById('filter-tag-input');
-    if (tagInput) {
-        tagInput.value = tag;
-    }
-    window.filterDesigns();
-};
-
-window.showToast = function(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('fade-out');
-        setTimeout(() => toast.remove(), 500);
-    }, 2000);
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', window.filterDesigns);
-    }
-    
-    const makeFilter = document.getElementById('filter-make');
-    if (makeFilter) {
-        makeFilter.addEventListener('input', window.filterDesigns);
-    }
-    
-    const yearFilter = document.getElementById('filter-year');
-    if (yearFilter) {
-        yearFilter.addEventListener('input', window.filterDesigns);
-    }
-    
-    const driveFilter = document.getElementById('filter-drive');
-    if (driveFilter) {
-        driveFilter.addEventListener('change', window.filterDesigns);
-    }
-
-    const tagFilterInput = document.getElementById('filter-tag-input');
-    if (tagFilterInput) {
-        tagFilterInput.addEventListener('input', window.filterDesigns);
-    }
-
+window.initGallery = function() {
     window.renderGallery();
-});
+};
+
+// Initialize when the DOM is ready
+if (document.readyState === 'complete') {
+    window.initGallery();
+} else {
+    window.addEventListener('DOMContentLoaded', window.initGallery);
+}
