@@ -1,12 +1,24 @@
-let activeFilters = new Set();
+/**
+ * OpenClaude Site Logic
+ * Handles gallery rendering, filtering, and design copying
+ */
+
+window.designs = [];
+
+window.showToast = function(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => {
+        t.classList.add('fade-out');
+        setTimeout(() => t.remove(), 500);
+    }, 2000);
+};
 
 window.copyCode = function(code) {
     navigator.clipboard.writeText(code).then(() => {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = 'Copied: ' + code;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+        window.showToast('Code copied!');
     });
 };
 
@@ -16,27 +28,29 @@ window.renderGallery = function(designsToRender = window.designs) {
     gallery.innerHTML = '';
 
     if (designsToRender.length === 0) {
-        gallery.innerHTML = '<div style="text-align:center; grid-column: 1/-1; color: var(--text-dim); padding: 3rem;">No designs match these filters.</div>';
+        gallery.innerHTML = '<div class="no-results">No designs found matching your criteria.</div>';
         return;
     }
 
-    designsToRender.forEach(design => {
+    designsToRender.forEach(d => {
         const card = document.createElement('div');
         card.className = 'card';
+        const sortedTags = [...d.tags].sort();
         card.innerHTML = `
-            <img src="${design.thumbnail}" alt="${design.model}" class="thumbnail">
+            <img src="${d.thumbnail}" alt="${d.name}" class="card-img">
             <div class="card-content">
-                <div class="car-info">
-                    <span class="car-year">${design.year}</span>
-                    <h3 class="car-name">${design.make} ${design.model}</h3>
-                    <div class="design-name">${design.name}</div>
+                <div class="card-header">
+                    <span class="card-make">${d.make}</span>
+                    <span class="card-year">${d.year}</span>
                 </div>
-                <div class="tags">
-                    ${design.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                <h3 class="card-title">${d.name}</h3>
+                <p class="card-model">${d.model}</p>
+                <div class="card-tags">
+                    ${sortedTags.map(t => `<span class="tag" onclick="window.handleTagFilter('${t}')">${t}</span>`).join('')}
                 </div>
-                <div class="share-section">
-                    <span class="share-code">${design.code}</span>
-                    <button class="copy-btn" onclick="copyCode('${design.code}')">Copy</button>
+                <div class="card-footer">
+                    <span class="card-drive">${d.drivetrain}</span>
+                    <button class="copy-btn" onclick="window.copyCode('${d.code}')">Copy Code</button>
                 </div>
             </div>
         `;
@@ -45,37 +59,66 @@ window.renderGallery = function(designsToRender = window.designs) {
 };
 
 window.filterDesigns = function() {
-    const makeQuery = document.getElementById('filter-make').value.toLowerCase();
-    const yearQuery = document.getElementById('filter-year').value;
-    const driveQuery = document.getElementById('filter-drive').value;
+    const makeTerm = (document.getElementById('filter-make')?.value || '').toLowerCase();
+    const yearTerm = (document.getElementById('filter-year')?.value || '').toLowerCase();
+    const driveTerm = document.getElementById('filter-drive')?.value || '';
+    const tagTerm = (document.getElementById('filter-tag-input')?.value || '').toLowerCase();
 
-    const filtered = designs.filter(d => {
-        const matchMake = !makeQuery || d.make.toLowerCase().includes(makeQuery);
-        const matchYear = !yearQuery || d.year.toString() === yearQuery;
-        const matchDrive = !driveQuery || d.drivetrain === driveQuery;
-        return matchMake && matchYear && matchDrive;
+    const filtered = window.designs.filter(d => {
+        const matchMake = !makeTerm || d.make.toLowerCase().includes(makeTerm);
+        const matchYear = !yearTerm || d.year.toString().toLowerCase().includes(yearTerm);
+        const matchDrive = !driveTerm || d.drivetrain === driveTerm;
+        const matchTags = !tagTerm || d.tags.some(t => t.toLowerCase().includes(tagTerm));
+        return matchMake && matchYear && matchDrive && matchTags;
     });
-
     window.renderGallery(filtered);
 };
 
-window.initFilters = function() {
-    const makeList = document.getElementById('makes-list');
-    const yearList = document.getElementById('years-list');
-    if (!makeList || !yearList) return;
-
-    const uniqueMakes = [...new Set(designs.map(d => d.make))].sort();
-    const uniqueYears = [...new Set(designs.map(d => d.year))].sort((a, b) => b - a);
-
-    uniqueMakes.forEach(make => {
-        const opt = document.createElement('option');
-        opt.value = make;
-        makeList.appendChild(opt);
-    });
-
-    uniqueYears.forEach(year => {
-        const opt = document.createElement('option');
-        opt.value = year;
-        yearList.appendChild(opt);
-    });
+window.handleTagFilter = function(tag) {
+    const tagInput = document.getElementById('filter-tag-input');
+    if (tagInput) {
+        tagInput.value = tag;
+    }
+    window.filterDesigns();
 };
+
+window.showToast = function(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 500);
+    }, 2000);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', window.filterDesigns);
+    }
+    
+    const makeFilter = document.getElementById('filter-make');
+    if (makeFilter) {
+        makeFilter.addEventListener('input', window.filterDesigns);
+    }
+    
+    const yearFilter = document.getElementById('filter-year');
+    if (yearFilter) {
+        yearFilter.addEventListener('input', window.filterDesigns);
+    }
+    
+    const driveFilter = document.getElementById('filter-drive');
+    if (driveFilter) {
+        driveFilter.addEventListener('change', window.filterDesigns);
+    }
+
+    const tagFilterInput = document.getElementById('filter-tag-input');
+    if (tagFilterInput) {
+        tagFilterInput.addEventListener('input', window.filterDesigns);
+    }
+
+    window.renderGallery();
+});
