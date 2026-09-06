@@ -27,26 +27,14 @@
                 <option value="RWD">RWD</option>
                 <option value="AWD">AWD</option>
             </select>
-
-            <div class="tag-input-wrapper">
-                <input type="text" id="filter-tag-input" list="tags-list" placeholder="Add Tag...">
-                <datalist id="tags-list"></datalist>
-            </div>
-        </div>
-        <div class="filter-tags" id="filter-bar">
-            <!-- Active tag chips will appear here -->
         </div>
     </div>
 
     <main class="gallery" id="gallery">
+        <div class="loading">Loading designs...</div>
     </main>
 
     <script src="data.js"></script>
     <script src="app.js"></script>
-    <script>
-        window.onload = () => {
-            window.renderGallery();
-        };
-    </script>
 </body>
 </html>

@@ -7,6 +7,10 @@
     --border-color: #33333b;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -26,6 +30,18 @@ header {
     margin-bottom: 2rem;
 }
 
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent-color);
+}
+
+header p {
+    margin: 0.5rem 0 0 0;
+}
+
 .filter-container {
     display: flex;
     gap: 10px;
@@ -33,27 +49,37 @@ header {
     justify-content: center;
     margin-bottom: 3rem;
     padding: 0 1rem;
+    width: 100%;
 }
 
-.filter-btn {
-    background: var(--card-bg);
+.search-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.search-controls input,
+.search-controls select {
+    padding: 10px 14px;
+    border-radius: 6px;
     border: 1px solid var(--border-color);
-    color: var(--text-dim);
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
 }
 
-.filter-btn.active {
+.search-controls input:focus,
+.search-controls select:focus {
+    outline: none;
     border-color: var(--accent-color);
-    color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+    box-shadow: 0 0 8px rgba(0, 242, 255, 0.2);
 }
 
-.filter-btn:hover {
-    background: #252530;
+.search-controls input::placeholder {
+    color: var(--text-dim);
 }
 
 .gallery {
@@ -77,145 +103,248 @@ header {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     border-color: #444;
 }
 
-.thumbnail {
+.card-img {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     background: #000;
+    display: block;
 }
 
 .card-content {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
-    .card-content {
-        padding: 1.5rem;
-    }
-
-    .car-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin: 0 0 0.5rem 0;
-    }
-
-    .tags {
-        display: flex;
-        gap: 5px;
-        flex-wrap: wrap;
-        margin-bottom: 1rem;
-    }
-
-    .tag {
-        background: #2a2a35;
-        color: var(--text-dim);
-        font-size: 0.75rem;
-        padding: 2px 8px;
-        border-radius: 4px;
-        border: 1px solid var(--border-color);
-    }
-
-    .share-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #0f0f12;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-    }
-
-    .share-code {
-        font-family: 'Courier New', monospace;
-        color: var(--accent-color);
-        font-weight: bold;
-        font-size: 0.9rem;
-    }
-
-    .copy-btn {
-        background: var(--accent-color);
-        color: #000;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.8rem;
-        transition: opacity 0.2s;
-    }
-
-    .copy-btn:hover {
-        opacity: 0.8;
-    }
-
-    .copy-btn:active {
-        transform: scale(0.95);
-    }
-
-    .toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: var(--accent-color);
-        color: #000;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-        animation: slideIn 0.3s ease-out;
-        z-index: 1000;
-    }
-
-    @keyframes slideIn {
-        from { transform: translateX(100%); }
-        to { transform: translateX(0); }
-    }
-
-/* Car Info Styles */
-.car-info {
+.card-header {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 8px;
 }
 
-.car-year {
+.card-make {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-year {
     font-size: 0.85rem;
     color: var(--text-dim);
     font-weight: 600;
 }
 
-.car-name {
-    font-size: 1.1rem;
+.card-title {
+    font-size: 1.2rem;
     font-weight: 700;
+    margin: 0 0 0.5rem 0;
     color: var(--text-main);
-    margin: 0;
 }
 
-/* Search Controls */
-.search-controls {
+.card-model {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin: 0 0 1rem 0;
+}
+
+.card-tags {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
+    gap: 6px;
     flex-wrap: wrap;
+    margin-bottom: 1rem;
 }
 
-.search-controls input, .search-controls select {
-    padding: 8px 12px;
+.tag {
+    background: #2a2a35;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: #2f2f3a;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.card-drive {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.copy-btn {
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.copy-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.copy-btn:active {
+    transform: scale(0.98);
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: #000;
+    padding: 12px 24px;
     border-radius: 6px;
-    border: 1px solid var(--text-dim);
-    background: var(--bg-dark);
-    color: white;
-    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.filter-tags {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+.toast.fade-out {
+    animation: slideOut 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(110%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(110%);
+        opacity: 0;
+    }
+}
+
+/* Empty state */
+.no-results,
+.error {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        width: 95%;
+    }
+
+    .search-controls {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .search-controls input,
+    .search-controls select {
+        width: 100%;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .copy-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+        width: 100%;
+        padding: 0 1rem 5rem 1rem;
+    }
+
+    .card-header {
+        flex-wrap: wrap;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .copy-btn {
+        width: 100%;
+    }
+
+    .toast {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
 }
