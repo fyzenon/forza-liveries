@@ -15,8 +15,12 @@
 
     <div class="filter-container">
         <div class="search-controls">
-            <input type="text" id="filter-make" placeholder="Filter by Make..." oninput="filterDesigns()">
-            <input type="number" id="filter-year" placeholder="Year..." oninput="filterDesigns()">
+            <input type="text" id="filter-make" list="makes-list" placeholder="Filter by Make..." oninput="filterDesigns()">
+            <datalist id="makes-list"></datalist>
+            
+            <input type="text" id="filter-year" list="years-list" placeholder="Year..." oninput="filterDesigns()">
+            <datalist id="years-list"></datalist>
+
             <select id="filter-drive" onchange="filterDesigns()">
                 <option value="">All Drivetrains</option>
                 <option value="FWD">FWD</option>
