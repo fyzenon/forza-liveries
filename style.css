@@ -27,7 +27,7 @@ header {
 }
 
 .filter-container {
-    display: flex;
+    display: none;
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
