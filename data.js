@@ -58,5 +58,15 @@ window.designs = [
         thumbnail: 'https://i.ibb.co/60Py6fBM/E9-DA3-F78-4-EF0-4920-9-B05-27-CEED55-BDF6.png',
         drivetrain: 'RWD',
         tags: ['Rare', 'Anime', 'Character']
+    },
+    {
+        make: 'Ford',
+        model: 'Mustang Dark Horse',
+        year: 2024,
+        name: 'Ellen Joe ZZZ',
+        code: '554-679-594',
+        thumbnail: 'https://i.ibb.co/JjjnY4JM/99195814-E68-B-4353-B6-C7-790-EDD553-C27.png',
+        drivetrain: 'RWD',
+        tags: ['Epic', 'Game', 'Character']
     }
 ];
