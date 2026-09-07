@@ -48,5 +48,15 @@ window.designs = [
         thumbnail: 'https://i.ibb.co/spFtQTyg/D3-B1-E8-DA-8-E6-A-465-E-A09-A-F68-B9-AD97-E41.png',
         drivetrain: 'AWD',
         tags: ['Epic', 'Game', 'Character']
+    },
+    {
+        make: 'Chevrolet',
+        model: 'Corvette Stingray Coupe',
+        year: 2020,
+        name: 'Anime Girl Selfie',
+        code: '204-376-930',
+        thumbnail: 'https://i.ibb.co/60Py6fBM/E9-DA3-F78-4-EF0-4920-9-B05-27-CEED55-BDF6.png',
+        drivetrain: 'RWD',
+        tags: ['Rare', 'Anime', 'Character']
     }
 ];
